@@ -1,26 +1,85 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --eq-primary: #5c7a5c;
+  --eq-bg: #f5f0eb;
+  --eq-card: #ede8e1;
+  --eq-text: #2c2c2c;
+  --eq-text-muted: #8a8a8a;
+  --eq-radius-card: 16px;
+  --eq-radius-btn: 12px;
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  --color-eq-primary: var(--eq-primary);
+  --color-eq-bg: var(--eq-bg);
+  --color-eq-card: var(--eq-card);
+  --color-eq-text: var(--eq-text);
+  --color-eq-text-muted: var(--eq-text-muted);
+  --radius-eq-card: var(--eq-radius-card);
+  --radius-eq-btn: var(--eq-radius-btn);
+  --font-sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Inter, Roboto, "Helvetica Neue", Arial,
+    "Noto Sans", "Liberation Sans", sans-serif;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--eq-bg);
+  color: var(--eq-text);
+  font-family: var(--font-sans);
+}
+
+* {
+  -webkit-tap-highlight-color: transparent;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .eq-page {
+    animation: eq-fade-up 280ms ease-out both;
+  }
+}
+
+@keyframes eq-fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Sleek premium scrollbar styles for a native app feel */
+::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(92, 122, 92, 0.2);
+  border-radius: 999px;
+  border: 1px solid transparent;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(92, 122, 92, 0.45);
+}
+
+/* Hide scrollbar completely inside the mobile app view (.eq-page) */
+.eq-page::-webkit-scrollbar {
+  display: none;
+}
+.eq-page {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+}
+
+/* Support for Firefox thin scrollbars globally */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(92, 122, 92, 0.2) transparent;
 }
