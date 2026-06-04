@@ -4,6 +4,7 @@ import * as React from "react";
 import { useRouter } from "next/navigation";
 import { Eye, EyeOff, Lock, Mail, User } from "lucide-react";
 import { useEquilibriaStore } from "@/lib/store";
+import { supabase } from "@/lib/supabase";
 import Image from "next/image";
 
 function Logo() {
@@ -93,12 +94,40 @@ export default function AuthPage() {
   const [userName, setLocalUserName] = React.useState("");
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
+  const handleGoogleLogin = async () => {
+  const { error } = await supabase.auth.signInWithOAuth({
+    provider: "google",
+    options: {
+      redirectTo: `${window.location.origin}/home`,
+    },
+  });
+
+  if (error) {
+    alert(error.message);
+  }
+};
 
   const submit = (e: React.FormEvent) => {
-    e.preventDefault();
-    setUserName(userName || "Luthfi");
-    router.push("/home");
-  };
+  e.preventDefault();
+
+  if (!userName.trim()) {
+    alert("Username wajib diisi");
+    return;
+  }
+
+  if (mode === "register" && !email.trim()) {
+    alert("Email wajib diisi");
+    return;
+  }
+
+  if (!password.trim()) {
+    alert("Password wajib diisi");
+    return;
+  }
+
+  setUserName(userName);
+  router.push("/home");
+};
 
   return (
     <main className="min-h-[calc(100dvh-0px)] bg-eq-bg">
@@ -109,9 +138,15 @@ export default function AuthPage() {
           <TabButton active={mode === "login"} onClick={() => setMode("login")}>
             Login
           </TabButton>
-          <TabButton active={mode === "register"} onClick={() => setMode("register")}>
-            Register
-          </TabButton>
+          <TabButton
+  active={mode === "register"}
+  onClick={() => {
+    console.log("REGISTER CLICK");
+    setMode("register");
+  }}
+>
+  Register
+</TabButton>
         </div>
 
         <form onSubmit={submit} className="space-y-5">
@@ -170,12 +205,15 @@ export default function AuthPage() {
             <span className="relative bg-eq-bg px-3 text-xs text-eq-text-muted">or continue with</span>
           </div>
 
-          <SecondaryButton type="button">
-            <span className="inline-flex items-center justify-center gap-2">
-              <span className="grid size-5 place-items-center rounded-full bg-[#EA4335] text-[10px] font-bold text-white">G</span>
-              Continue with Google
-            </span>
-          </SecondaryButton>
+          <SecondaryButton
+  type="button"
+  onClick={handleGoogleLogin}
+>
+  <span className="inline-flex items-center justify-center gap-2">
+    <span className="grid size-5 place-items-center rounded-full bg-[#EA4335] text-[10px] font-bold text-white">G</span>
+    Continue with Google
+  </span>
+</SecondaryButton>
         </form>
       </div>
     </main>
